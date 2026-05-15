@@ -60,4 +60,60 @@ but catches zero fraud.
 
 ### Dual Threshold Optimisation
 Systematic threshold tuning across 100 values (0 to 1):
-1.
+1. AUPRC optimisation — maximising fraud class performance
+2. Total Cost optimisation — minimising operational loss
+
+Results reveal the tension between statistical performance 
+and business cost minimisation — the final threshold choice 
+depends on the bank's risk appetite.
+
+### Streamlit Deployment
+Final model deployed as an interactive web application 
+enabling real-time fraud probability scoring on new 
+transaction data.
+
+## Domain Context
+Feature engineering and fraud typology selection grounded 
+in 7+ years of hands-on fraud investigation at PayPal:
+- Velocity abuse patterns
+- Behavioural anomalies
+- Account takeover signals
+- Mule account detection typologies
+
+This domain expertise bridges the gap between ML modelling 
+and real-world fraud operations — ensuring the model 
+captures meaningful fraud signals rather than statistical noise.
+
+## Tools & Libraries
+- Python
+- Pandas, NumPy
+- Scikit-learn, XGBoost
+- Imbalanced-learn
+- SHAP
+- Yellowbrick
+- Matplotlib, Seaborn
+- Streamlit
+
+## Dataset
+IEEE-CIS Credit Card Fraud Detection Dataset
+- 284,807 transactions
+- 492 fraud cases (0.17% fraud rate)
+- 28 PCA-transformed features (V1-V28)
+- Download from Kaggle:
+  https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+- Place as: data/creditcard.csv
+
+## Key Results
+- XGBoost achieves lowest total business cost across all models
+- AUPRC-optimised threshold differs significantly from 
+  default 0.5 — confirming threshold tuning is essential
+- SHAP confirms model decisions align with known fraud 
+  signal typologies from PayPal domain knowledge
+- Cost-based threshold reveals precision-recall tradeoff 
+  that purely statistical metrics miss
+
+## Author
+**Manzoor Syiemlieh**
+Data Scientist | Fraud & Risk Analytics | 7+ Years Fintech @ PayPal
+[LinkedIn](https://www.linkedin.com/in/manzoor-syiemlieh)
+[GitHub](https://github.com/manzoor-syiemlieh)
