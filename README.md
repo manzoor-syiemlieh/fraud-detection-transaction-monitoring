@@ -1,8 +1,7 @@
 # Fraud Detection & Transaction Monitoring System
 
 ## Project Overview
-End-to-end fraud detection pipeline built on the IEEE-CIS 
-credit card fraud dataset (284,807 transactions, 492 fraud 
+End-to-end fraud detection pipeline built on credit card fraud dataset (284,807 transactions, 492 fraud 
 cases — 0.17% fraud rate). Combines machine learning with 
 domain expertise from 7+ years of fraud investigation at 
 PayPal to build a production-grade fraud scoring system.
