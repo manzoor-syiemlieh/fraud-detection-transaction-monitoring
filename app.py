@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # reading csv
-error_df = pd.read_csv("C:/Users/Admin/Desktop/Fraud_Detection_Python/Optimal_Model_Selection/Building_Threshold_Simulation_for_Visual_Inspection/error_df.csv")
+error_df = pd.read_csv("data/error_df.csv")
 error_df.columns = ['Index', 'Target variable', 'Score']
 error_df = error_df[['Target variable', 'Score']]
 
