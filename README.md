@@ -105,12 +105,12 @@ IEEE-CIS Credit Card Fraud Detection Dataset
 
 ## Key Results
 - XGBoost achieves lowest total business cost across all models
-- AUPRC-optimised threshold differs significantly from 
-  default 0.5 — confirming threshold tuning is essential
-- SHAP confirms model decisions align with known fraud 
-  signal typologies from PayPal domain knowledge
-- Cost-based threshold reveals precision-recall tradeoff 
-  that purely statistical metrics miss
+- AUPRC-optimised threshold differs significantly from default 0.5 — confirming threshold tuning is essential
+- SHAP confirms model decisions align with known fraud signal typologies from PayPal domain knowledge
+- Cost-based threshold reveals precision-recall tradeoff that purely statistical metrics miss
+
+## Live App
+👉 **[Click here to open the live fraud scoring app](https://manzoor-fraud-detection.streamlit.app)**
 
 ## Author
 **Manzoor Syiemlieh**
