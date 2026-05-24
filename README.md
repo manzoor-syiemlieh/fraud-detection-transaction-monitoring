@@ -95,7 +95,7 @@ captures meaningful fraud signals rather than statistical noise.
 - Streamlit
 
 ## Dataset
-IEEE-CIS Credit Card Fraud Detection Dataset
+Credit Card Fraud Detection Dataset
 - 284,807 transactions
 - 492 fraud cases (0.17% fraud rate)
 - 28 PCA-transformed features (V1-V28)
