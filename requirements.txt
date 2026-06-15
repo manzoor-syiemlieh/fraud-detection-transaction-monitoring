@@ -1,9 +1,5 @@
 streamlit
 pandas
 numpy
-scikit-learn
-xgboost
-matplotlib
-seaborn
-shap
-imbalanced-learn
+scikit-learn==1.7.2
+xgboost==2.1.4
