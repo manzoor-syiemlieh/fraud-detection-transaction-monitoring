@@ -1,118 +1,115 @@
-# Fraud Detection & Transaction Monitoring System
+Fraud Detection & Transaction Monitoring System
 
-## Project Overview
-End-to-end fraud detection pipeline built on credit card fraud dataset (284,807 transactions, 492 fraud 
-cases — 0.17% fraud rate). Combines machine learning with 
-domain expertise from 7+ years of fraud investigation at 
-PayPal to build a production-grade fraud scoring system.
+An end-to-end credit-card fraud detection project: benchmark three models on a
+severely imbalanced dataset, choose the right metric and decision threshold for a
+business problem rather than a purely statistical one, explain the model with
+SHAP, and ship a live app that scores new transactions in real time.
 
-## Business Objective
-- Detect fraudulent transactions while minimising operational cost
-- Explain model decisions using SHAP for fraud analyst trust
-- Optimise decision threshold using both statistical and 
-  business cost frameworks
-- Deploy fraud scoring model as interactive Streamlit application
+Built by a fraud investigator with 7+ years at PayPal, so the feature reasoning and
+fraud typologies come from frontline operations, not just the data.
 
-## Project Structure
-| File | Description |
-|------|-------------|
-| 01_Fraud_Detection_Models_and_Threshold_Optimisation.ipynb | End-to-end fraud detection pipeline |
-| app.py | Streamlit web application for fraud scoring |
-| eval.py | Model evaluation utilities |
+Live app: https://manzoor-fraud-detection.streamlit.app
 
-## Technical Approach
+Show Image
 
-### Models Trained
-Three classifiers benchmarked with hyperparameter tuning 
-optimised for severe class imbalance:
-- Logistic Regression with balanced and custom class weights
-- Random Forest with class weight tuning
-- XGBoost with scale_pos_weight optimisation
 
-### Evaluation Framework
-Primary metric: AUPRC — more informative than ROC-AUC 
-for severely imbalanced fraud datasets
+The problem
 
-Full metrics suite:
-- Precision, Recall, F1-Score
-- ROC-AUC, AUPRC, G-Mean, MCC
-- Yellowbrick visualisations — ClassificationReport, 
-  ROCAUC, PrecisionRecallCurve, DiscriminationThreshold
+Card fraud is a needle-in-a-haystack problem: 492 frauds in 284,807 transactions
+(0.17%). A model that flags nothing is 99.8% accurate and useless. The real
+questions are which model separates fraud from non-fraud under this imbalance, what
+metric should drive that choice, where to set the decision threshold when a missed
+fraud costs far more than a false alarm, and whether the model's decisions can be
+explained well enough for an analyst to trust them.
 
-### Model Explainability — SHAP
-Applied SHAP (SHapley Additive Explanations) to explain 
-individual fraud predictions — identifying key fraud signals 
-and validating model logic against real-world fraud typologies.
+Data
 
-Critical for regulatory compliance and fraud analyst 
-trust in production environments.
+Credit Card Fraud Detection (Kaggle, ULB)
+— 284,807 transactions, 492 frauds, 28 PCA-anonymised features (V1-V28). The
+model is trained on the 28 PCA features only. The full dataset isn't committed;
+download it and place it at data/creditcard.csv to re-run the notebook. A small
+labelled sample (data/sample_transactions.csv) is included so the live app's
+sample-scoring works without the full file.
 
-### Business Cost Analysis
-Defined cost matrix reflecting operational reality:
-- False Negative (missed fraud): Cost = 100
-- False Positive (false alarm): Cost = 10
-- True Negative / True Positive: Cost = 1
+Approach
 
-Demonstrated the Accuracy Paradox — a naive model predicting 
-all transactions as legitimate achieves 99.8% accuracy 
-but catches zero fraud.
 
-### Dual Threshold Optimisation
-Systematic threshold tuning across 100 values (0 to 1):
-1. AUPRC optimisation — maximising fraud class performance
-2. Total Cost optimisation — minimising operational loss
+Benchmark three models — Logistic Regression, Random Forest, XGBoost — all
+handling imbalance via class weighting / scale_pos_weight, not oversampling, so
+the training distribution stays honest.
+Judge on AUPRC, not accuracy or ROC-AUC. At a 0.17% positive rate, AUPRC
+reflects performance on the class that matters.
+Tune the threshold to a cost matrix. A missed fraud is set 10x more expensive
+than a false alarm. Sweeping 100 thresholds shows the AUPRC-optimal point and the
+cost-optimal point don't coincide — which is the whole point.
+Explain with SHAP to confirm the model concentrates on a small set of
+behavioural features, mapped to real typologies: velocity abuse, behavioural
+anomalies, account takeover.
 
-Results reveal the tension between statistical performance 
-and business cost minimisation — the final threshold choice 
-depends on the bank's risk appetite.
 
-### Streamlit Deployment
-Final model deployed as an interactive web application 
-enabling real-time fraud probability scoring on new 
-transaction data.
+Model comparison
 
-## Domain Context
-Feature engineering and fraud typology selection grounded 
-in 7+ years of hands-on fraud investigation at PayPal:
-- Velocity abuse patterns
-- Behavioural anomalies
-- Account takeover signals
-- Mule account detection typologies
+ModelROC-AUCAUPRCLogistic Regression0.97090.7092Random Forest0.96250.8460XGBoost0.97390.8670
 
-This domain expertise bridges the gap between ML modelling 
-and real-world fraud operations — ensuring the model 
-captures meaningful fraud signals rather than statistical noise.
+ROC-AUC is nearly identical across all three (0.96-0.97) — which is exactly why it's
+the wrong metric here. AUPRC spreads from 0.71 to 0.87 and cleanly separates the
+models, so XGBoost is the pick.
 
-## Tools & Libraries
-- Python
-- Pandas, NumPy
-- Scikit-learn, XGBoost
-- Imbalanced-learn
-- SHAP
-- Yellowbrick
-- Matplotlib, Seaborn
-- Streamlit
+Threshold: default vs cost-optimal (XGBoost)
 
-## Dataset
-Credit Card Fraud Detection Dataset
-- 284,807 transactions
-- 492 fraud cases (0.17% fraud rate)
-- 28 PCA-transformed features (V1-V28)
-- Download from Kaggle:
-  https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-- Place as: data/creditcard.csv
+ThresholdPrecisionRecallFrauds caughtDefault 0.50.8710.82781 / 98Cost-optimal 0.0710.7520.86785 / 98
 
-## Key Results
-- XGBoost achieves lowest total business cost across all models
-- AUPRC-optimised threshold differs significantly from default 0.5 — confirming threshold tuning is essential
-- SHAP confirms model decisions align with known fraud signal typologies from PayPal domain knowledge
-- Cost-based threshold reveals precision-recall tradeoff that purely statistical metrics miss
+Moving the threshold from 0.5 to 0.071 trades precision for recall — accepting more
+false alarms to catch 4 more frauds — because under the 100:10 cost ratio that's the
+cheapest outcome overall. This is the trade-off the live app lets you explore.
 
-## Live App
-👉 **[Click here to open the live fraud scoring app](https://manzoor-fraud-detection.streamlit.app)**
+The live app
 
-## Author
-**Manzoor Syiemlieh**
-Data Scientist | Fraud & Risk Analytics | 7+ Years Fintech @ PayPal
-[LinkedIn](https://www.linkedin.com/in/manzoor-syiemlieh)
-[GitHub](https://github.com/manzoor-syiemlieh)
+The app loads the trained XGBoost model and scores transactions in real time:
+
+
+Score a sample transaction — pull a random record from the held-out sample and
+see its fraud probability, the flag/no-flag decision, and whether the model was right.
+Upload a CSV — score a batch of transactions (must contain V1-V28). If a
+Class column is present, the app reports recall, precision, frauds caught, total
+cost, and how that cost compares to the naive 0.5 threshold.
+
+
+The decision threshold and the per-outcome costs are adjustable in the sidebar, so an
+analyst can see the operational impact of moving the cut-off — which mirrors how fraud
+teams actually tune a deployed model.
+
+Repo structure
+
+PathWhat it is01_Fraud_Detection_Models_and_Threshold_Optimisation.ipynbFull pipeline: EDA, three models, evaluation, SHAP, threshold sweep, model exportapp.pyStreamlit app — real-time scoring + threshold/cost analysismodel/fraud_xgb.jsonTrained XGBoost model (native format)model/feature_columns.jsonExpected feature order, used to validate inputsdata/sample_transactions.csvSmall labelled sample for the appreports/shap_summary.pngSHAP feature-importance summaryrequirements.txtPinned dependencies
+
+Run it locally
+
+bashgit clone https://github.com/manzoor-syiemlieh/fraud-detection-transaction-monitoring.git
+cd fraud-detection-transaction-monitoring
+pip install -r requirements.txt
+
+# run the app (uses the bundled model + sample)
+streamlit run app.py
+
+# to re-run the full pipeline, download creditcard.csv from Kaggle into data/, then:
+jupyter notebook 01_Fraud_Detection_Models_and_Threshold_Optimisation.ipynb
+
+Limitations & next steps
+
+
+Features are PCA-anonymised, so SHAP maps to typologies conceptually rather than to
+named raw features.
+No drift monitoring or scheduled retraining — the obvious production extension, out
+of scope for a portfolio project.
+Threshold and cost ratios are illustrative; in production they'd be set from the
+bank's actual loss and review-capacity data.
+
+
+Author
+
+Manzoor Syiemlieh — Fraud & Risk Analytics, 7+ years (PayPal) -> Data Science
+LinkedIn ·
+GitHub
+
+MIT Licensed.
