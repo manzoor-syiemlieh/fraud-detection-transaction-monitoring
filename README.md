@@ -89,7 +89,7 @@ jupyter notebook 01_Fraud_Detection_Models_and_Threshold_Optimisation.ipynb
 ## Author
 
 **Manzoor Syiemlieh** — Fraud & Risk Analytics, 7+ years (PayPal) -> Data Science
-[LinkedIn](https://www.linkedin.com/in/manzoor-syiemlieh) ·
+[LinkedIn](https://www.linkedin.com/in/manzoor-syiemlieh-4193683a5/) ·
 [GitHub](https://github.com/manzoor-syiemlieh)
 
 MIT Licensed.
