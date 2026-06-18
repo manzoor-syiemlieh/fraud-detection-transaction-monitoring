@@ -24,7 +24,7 @@ Card fraud is a needle-in-a-haystack problem: **492 frauds in 284,807 transactio
 1. **Benchmark three models** — Logistic Regression, Random Forest, XGBoost — allhandling imbalance via class weighting / `scale_pos_weight`, not oversampling, so the training distribution stays honest.
 2. **Judge on AUPRC, not accuracy or ROC-AUC.** At a 0.17% positive rate, AUPRC reflects performance on the class that matters.
 3. **Tune the threshold to a cost matrix.** A missed fraud is set 10x more expensive than a false alarm. Sweeping 100 thresholds shows the AUPRC-optimal point and the cost-optimal point don't coincide — which is the whole point.
-4. **Explain with SHAP** to confirm the model concentrates on a small set of behavioural features, mapped to real typologies: velocity abuse, behavioural anomalies, account takeover.
+4. **Explain with SHAP** to confirm the model concentrates on a small set of features becasue the features are anonymised PCA components, I read the fraud typologies (velocity, behavioural anomalies, ATO) conceptually — they're not mapped to named features.
 
 ## Model comparison
 
